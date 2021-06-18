@@ -20,17 +20,40 @@ const app = express()
 app.use(express.json())
 
 let logger = (req, res, next) => {
-   req ?  console.log('Express Logger req', req.body ) : console.log('Express Logger res', res.body )
+   req ?  console.log('Express Logger req', req.method, req.path ) : console.log('Express Logger res', res.body )
    next()
 }
 app.use(logger)
 
-const authRouter = require('./route/auth')
-app.use('/auth', authRouter)
+const userRouter = require('./route/user')
+app.use('/user', userRouter)
 
+const validateRequest = (req, res, next) => {
+    console.log('validate')
+    let authHeader = req.headers['authorization'] 
+    if ( !authHeader ) {
+        console.log('validate no auth header',   )
+        res.status(403).send("Token not provided")
+        return
+    }
+    let token =authHeader.split(" ")[1]
+    if (!token ) {
+        res.status(403).send("Token not provided")
+        return
+    }
+    try {
+        let data = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+        console.log(data)
+        next()
+    } catch(err) {
+        res.status(403).send("Invaild Token provided")
+        
+    }
+}
 
-app.get('/address', (req,res) =>{
+app.get('/address', validateRequest, (req,res) =>{
     console.log('GET /address', req.body, res.body)
+    res.end()
 })
 
 const PORT = 4000
