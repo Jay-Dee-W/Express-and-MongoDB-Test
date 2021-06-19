@@ -14,11 +14,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address: {
-        type: mongoose.SchemaType.ObjectId,
-        ref: 'Address'   
-    }
+    // address: {
+    //     type: mongoose.SchemaType.ObjectId,
+    //     ref: 'Address'   
+    // }
 })
-
+ 
 const UserModel = mongoose.model('User', UserSchema)
 module.exports = UserModel

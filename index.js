@@ -19,19 +19,20 @@ const app = express()
 
 app.use(express.json())
 
-let logger = (req, res, next) => {
-   req ?  console.log('Express Logger req', req.body ) : console.log('Express Logger res', res.body )
-   next()
-}
+const logger = require('./middleware/logger')
 app.use(logger)
 
-const authRouter = require('./route/auth')
-app.use('/auth', authRouter)
+
+const userRouter = require('./route/user')
+app.use('/user', userRouter)
+
+const validate = require('./middleware/validate')
 
 
-app.get('/address', (req,res) =>{
-    console.log('GET /address', req.body, res.body)
-})
+const addressRouter = require('./route/address')
+app.use('/address', validate, addressRouter)
+
+
 
 const PORT = 4000
 app.listen(PORT, () =>{
