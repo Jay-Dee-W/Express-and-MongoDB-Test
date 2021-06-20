@@ -41,6 +41,7 @@ router.get('/token', async (req, res) => {
         const payload = {
             name : jwt.decode(validToken.token).name 
         }
+        console.log('payload', payload )
         let token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME })
         res.status(200).json({ 'access_token': token })
         // res.end()

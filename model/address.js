@@ -21,6 +21,11 @@ const AddressSchema = new mongoose.Schema({
     }, 
     label: {
         type: String
+    },
+    user : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
     }
 })
 

@@ -7,13 +7,14 @@ const validateRequest = (req, res, next) => {
         return
     }
     let token = authHeader.split(" ")[1]
-    console.log(token)
+    console.log('validate decode', jwt.decode(token) )
+   
     if (!token ) {
         res.status(403).send("Token not provided")
         return
     }
     try {
-        jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) 
         next()
     } catch(err) {
         res.status(403).send("Invaild Token provided")
